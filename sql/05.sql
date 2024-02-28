@@ -11,3 +11,19 @@
  * For this problem, you should use the NOT IN clause;
  * in problem 05b you will use the LEFT JOIN clause.
  */
+SELECT last_name, first_name
+from actor act 
+WHERE last_name NOT IN (SELECT distinct actor.last_name
+FROM actor
+JOIN film_actor on actor.actor_id=film_actor.actor_id
+JOIN film ON film_actor.film_id=film.film_id
+JOIN inventory ON film.film_id=inventory.film_id
+JOIN rental ON inventory.inventory_id=rental.inventory_id
+JOIN customer ON actor.first_name = customer.first_name AND actor.last_name = customer.last_name) or first_name not in (SELECT distinct actor.first_name
+FROM actor
+JOIN film_actor on actor.actor_id=film_actor.actor_id
+JOIN film ON film_actor.film_id=film.film_id
+JOIN inventory ON film.film_id=inventory.film_id
+JOIN rental ON inventory.inventory_id=rental.inventory_id
+JOIN customer ON actor.first_name = customer.first_name AND actor.last_name = customer.last_name)
+order by last_name, first_name;

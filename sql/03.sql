@@ -10,3 +10,21 @@
  * Next, join the film, inventory, rental, and customer tables.
  * Use a where clause to restrict results to the subquery.
  */
+/* tells us the titles of the 5 most profitable movies:*/
+select distinct foo.customer_id from (select customer_id, title 
+from customer 
+join rental using(customer_id) 
+join inventory using(inventory_id) 
+join film using(film_id) 
+where title IN (
+        select f.title 
+        from (
+                select film.title, sum(payment.amount) as profit 
+                from payment 
+                join rental using(rental_id) 
+                join inventory using(inventory_id) 
+                join film using(film_id) 
+                group by film.title 
+                order by profit desc limit 5) 
+        as f)) as foo
+order by customer_id;
